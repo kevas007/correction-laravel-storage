@@ -17,3 +17,4 @@ use Illuminate\Support\Facades\Route;
 Route::get('/',[PhotoController::class , 'index' ]);
 Route::get('/create',[PhotoController::class , 'create' ]);
 Route::post('/store',[PhotoController::class , 'store' ]);
+Route::delete('/delete/{id}',[PhotoController::class , 'destroy' ]);

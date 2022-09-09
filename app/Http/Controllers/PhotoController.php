@@ -87,8 +87,12 @@ class PhotoController extends Controller
      * @param  \App\Models\Photo  $photo
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Photo $photo)
+    public function destroy($id)
     {
-        //
+        $dest = Photo::find($id);
+        Storage::delete('public/img/'.$dest->img);
+        $dest ->delete();
+        return redirect()->back();
+
     }
 }
