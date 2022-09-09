@@ -39,6 +39,10 @@ class PhotoController extends Controller
      */
     public function store(Request $request)
     {
+        request()->validate([
+            'img'=>['image', 'mimes:jpeg,png,jpg,gif,svg,webp', 'max:2048']
+
+        ]);
         Storage::put('public/img/', $request->file('img'));
         $store = new Photo;
         $store->src = $request->file('img')->hashName();
@@ -64,9 +68,11 @@ class PhotoController extends Controller
      * @param  \App\Models\Photo  $photo
      * @return \Illuminate\Http\Response
      */
-    public function edit(Photo $photo)
+    public function edit($id)
     {
-        //
+        $photo= Photo::find($id);
+
+        return view('pages.edit', compact('photo'));
     }
 
     /**
@@ -76,9 +82,16 @@ class PhotoController extends Controller
      * @param  \App\Models\Photo  $photo
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdatePhotoRequest $request, Photo $photo)
+    public function update(Request $request,$id)
     {
-        //
+        $update= Photo::find($id);
+        if( $request->file('img') != null){
+            Storage::delete('public/img/'. $update->src);
+            Storage::put('public/img/', $request->file('img'));
+            $update->src = $request->file('img')->hashName();
+            $update->save();
+        }
+        return redirect()->back();
     }
 
     /**
@@ -90,9 +103,19 @@ class PhotoController extends Controller
     public function destroy($id)
     {
         $dest = Photo::find($id);
-        Storage::delete('public/img/'.$dest->img);
+        // Storage::delete('public/img/'.$dest->img);
+
+        Storage::disk('public')->delete('img/'.$dest->img);
         $dest ->delete();
         return redirect()->back();
 
     }
+
+
+    public function download($id){
+        $download= Photo::find($id);
+
+        return Storage::download('public/img/' .$download->src );
+    }
+
 }

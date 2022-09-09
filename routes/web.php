@@ -17,4 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/',[PhotoController::class , 'index' ]);
 Route::get('/create',[PhotoController::class , 'create' ]);
 Route::post('/store',[PhotoController::class , 'store' ]);
-Route::delete('/delete/{id}',[PhotoController::class , 'destroy' ]);
+Route::get('/edit/{id}',[PhotoController::class , 'edit' ]);
+Route::put('/store/{id}',[PhotoController::class , 'update' ]);
+Route::delete('/effacer/{id}',[PhotoController::class , 'destroy' ]);
+Route::get('/download/{id}',[PhotoController::class , 'download' ]);
